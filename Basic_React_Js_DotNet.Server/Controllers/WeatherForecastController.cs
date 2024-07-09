@@ -23,11 +23,14 @@ namespace Basic_React_Js_DotNet.Server.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            var identifierClaim = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+            var userIdentifier = User.Claims.FirstOrDefault(x => x.Type == identifierClaim)?.Value;
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)] + $" (by {userIdentifier})"
             })
             .ToArray();
         }

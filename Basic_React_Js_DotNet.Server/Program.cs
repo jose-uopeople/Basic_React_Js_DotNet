@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Basic_React_Js_DotNet.Server
 {
@@ -14,6 +17,16 @@ namespace Basic_React_Js_DotNet.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-27564739.okta.com/oauth2/default";
+                options.Audience = "api://default";
+            });
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -28,6 +41,7 @@ namespace Basic_React_Js_DotNet.Server
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
