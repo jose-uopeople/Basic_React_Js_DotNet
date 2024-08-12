@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Basic_React_Js_DotNet.Server.Controllers
 {
@@ -23,8 +24,7 @@ namespace Basic_React_Js_DotNet.Server.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
-            var identifierClaim = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
-            var userIdentifier = User.Claims.FirstOrDefault(x => x.Type == identifierClaim)?.Value;
+            var userIdentifier = User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
